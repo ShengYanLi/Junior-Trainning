@@ -5,6 +5,7 @@
  *
  * @author jason_lee
  */
+session_start();
 include_once('Message.php');
 include_once('Database.php');
 
@@ -25,7 +26,7 @@ class MsgBoard extends Database
     function receiveMsg()
     {
         if (count($_POST) != 0) {
-            $this->saveData($_POST['userName'], date('Y-m-d h:i:s', time()), $_POST['content']);
+            $this->saveData($_SESSION['name'], date('Y-m-d h:i:s', time()), $_POST['content']);
         }
     }
 
