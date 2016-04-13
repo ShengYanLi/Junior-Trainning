@@ -1,21 +1,17 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  * Description of Database
  *
  * @author jason_lee
  */
-class Database {
+class Database
+{
 
-    var $database = null;
+    public $database = null;
 
-    function __construct() {
+    function __construct()
+    {
         $host = 'localhost';
         $account = 'root';
         $password = '1qaz';
@@ -31,7 +27,8 @@ class Database {
         echo "==============================================<br>";
     }
 
-    function __destruct() {
+    function __destruct()
+    {
         mysql_close($this->database);
     }
 
