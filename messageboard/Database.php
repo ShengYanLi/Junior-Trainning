@@ -19,12 +19,12 @@ class Database
         $this->database = mysql_connect($host, $account, $password);
         if (!$this->database) {
             echo "DB connect fail.<br>";
+        } else {
+            $result = mysql_select_db("db_messages", $this->database);
+            if (!$result) {
+                echo "DB select fail.<br>";
+            }
         }
-        $result = mysql_select_db("db_messages", $this->database);
-        if (!$result) {
-            echo "DB select fail.<br>";
-        }
-        echo "==============================================<br>";
     }
 
     function __destruct()

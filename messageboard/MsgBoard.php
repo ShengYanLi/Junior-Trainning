@@ -12,40 +12,55 @@ include_once('Database.php');
 class MsgBoard extends Database
 {
 
-    public $messages = array();
+    // public $messages = array();
 
     function __construct()
     {
         // $this->showForm();
         parent::__construct();
         $this->receiveMsg();
-        $this->loadData();
-        $this->showAllMsg();
+        $this->loadMsg();
+        // $this->showAllMsg();
     }
 
     function receiveMsg()
     {
         if (count($_POST) != 0) {
-            $this->saveData($_SESSION['name'], date('Y-m-d h:i:s', time()), $_POST['content']);
+            $this->saveMsg($_SESSION['name'], date('Y-m-d h:i:s', time()), $_POST['content'], $_POST['parent']);
         }
     }
 
-    function saveData($n, $t, $c)
+    function saveMsg($n, $t, $c, $p = 0)
     {
-        $query = "INSERT INTO all_messages (name, time, content) VALUES ('" . $n . "', '" . $t . "', '" . $c . "');";
+        $c = nl2br($c);
+        //$query = "INSERT INTO all_messages (name, time, content) VALUES ('" . $n . "', '" . $t . "', '" . $c . "');";
+        $query = "INSERT INTO all_messages (name, time, content, parent) VALUES ('" . $n . "', '" . $t . "', '" . $c . "', '" . $p . "');";
         mysql_query($query);
     }
 
-    function loadData()
+    function loadMsg()
     {
-        $query = "SELECT * FROM all_messages ORDER BY id DESC;";
+        $query = "SELECT * FROM all_messages WHERE parent = 0 ORDER BY sno DESC;";
         $result = mysql_query($query);
         while ($row = mysql_fetch_array($result)) {
-            $temp = new Message($row['name'], $row['time'], $row['content']);
-            array_push($this->messages, $temp);
+            $msg = new Message($row['name'], $row['time'], $row['content']);
+            // $this->showAllMsg();
+            $msg->show($row['sno']);
+            $this->loadReply($row['sno']);
+            // array_push($this->messages, $temp);
         }
     }
 
+    function loadReply($p)
+    {
+        $query = "SELECT * FROM all_messages WHERE parent = $p ORDER BY sno DESC;";
+        $result = mysql_query($query);
+        while ($row = mysql_fetch_array($result)) {
+            $msg = new Message($row['name'], $row['time'], $row['content']);
+            $msg->showReply();
+        }
+    }
+    /*
     function showForm()
     {
         echo "<form action='' method='POST' ><table>";
@@ -61,5 +76,5 @@ class MsgBoard extends Database
             $m->show();
         }
     }
-
+    */
 }

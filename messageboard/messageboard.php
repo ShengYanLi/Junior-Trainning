@@ -20,7 +20,7 @@ if ($_SESSION['id'] == null) {
         ?>
         發表留言：
         <form action='' method='POST' >
-            <textarea name='content' rows='6' cols='30'></textarea>
+            <textarea name='content' rows='4' cols='30'></textarea>
             <input type='submit' value="送出">
         </form>
         <?php
