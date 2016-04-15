@@ -2,12 +2,13 @@
 
 /**
  * Description of Database
- *
+ * 資料庫
  * @author jason_lee
  */
 class Database
 {
-
+    public $conn = null;
+    public $connect = null;
     public $database = null;
 
     function __construct()
@@ -16,20 +17,18 @@ class Database
         $account = 'root';
         $password = '1qaz';
 
-        $this->database = mysql_connect($host, $account, $password);
-        if (!$this->database) {
-            echo "DB connect fail.<br>";
+        $this->conn = mysqli_connect($host, $account, $password, "db_messages");
+        if ($this->conn) {
+            mysqli_query($this->conn, "SET NAMES utf8");
         } else {
-            $result = mysql_select_db("db_messages", $this->database);
-            if (!$result) {
-                echo "DB select fail.<br>";
-            }
+            die("無法對資料庫連線" . mysqli_connect_error());
         }
     }
 
     function __destruct()
     {
-        mysql_close($this->database);
+        // mysql_close($this->connect);
+        mysqli_close($this->conn);
     }
 
 }
