@@ -5,7 +5,7 @@ if (isset($_SESSION['id'])) {
     exit;
 }
 
-include("Database.php");
+include_once("database.php");
 header("Content-Type:text/html; charset=utf-8");
 
 $idEpt = "";
@@ -39,9 +39,15 @@ if (count($_POST) != 0) {
         if ($pw != $pw2) {
             $notEqu = "輸入兩次密碼不相同";
         } else {
-            $sql = "INSERT INTO member (id, password, name) VALUES ('" . $id . "', '" . $pw . "', '" . $name . "');";
-            $db = new Database();
-            if (!mysqli_query($db->conn, $sql)) {
+            $member = new Member();
+            $member->setId($id);
+            $member->setPassword($pw);
+            $member->setName($name);
+
+            $entityManager->persist($member);
+            $entityManager->flush();
+
+            if ($entityManager == null) {
                 $error = '資料庫異常，申請失敗!';
                 header("Refresh: 2; url='index.php'");
             } else {

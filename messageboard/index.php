@@ -5,7 +5,7 @@ if (isset($_SESSION['id'])) {
     exit;
 }
 
-include("Database.php");
+include_once("database.php");
 header("Content-Type:text/html; charset=utf-8");
 
 $idEpt = "";
@@ -25,16 +25,13 @@ if (count($_POST) != 0) {
         $pwEpt = "未輸入密碼";
     }
     if ($id && $pw) {
-        $sql = "SELECT * FROM member WHERE id = '" . $id . "';";
-        $db = new Database();
-        $result = mysqli_query($db->conn, $sql);
-        $row = mysqli_fetch_array($result);
 
-        if ($row['id'] != $id || $row['password'] != $pw) {
+        $member = $entityManager->getRepository('Member')->find($id);
+        if ($member == null || $member->getPassword() != $pw) {
             $error = "帳號或密碼錯誤";
         } else {
             $_SESSION['id'] = $id;
-            $_SESSION['name'] = $row['name'];
+            $_SESSION['name'] = $member->getName();
             $success = "登入成功！ 請稍等";
             header("Refresh: 1; url='messageboard.php'");
         }

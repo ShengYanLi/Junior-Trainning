@@ -1,18 +1,13 @@
 <?php
 
-include_once('Message.php');
-include_once('Database.php');
+include_once("database.php");
+header("Content-Type:text/html; charset=utf-8");
 
-/**
- * Description of MsgBoard
- * 留言板
- * @author jason_lee
- */
-class MsgBoard extends Database
-{    
+class MsgBoard
+{
+
     function __construct()
     {
-        parent::__construct();
         $this->receiveMsg();
         $this->loadMsg();
     }
@@ -20,36 +15,53 @@ class MsgBoard extends Database
     function receiveMsg()
     {
         if (count($_POST) != 0) {
-            $this->saveMsg($_SESSION['name'], date('Y-m-d h:i:s', time()), $_POST['content'], $_POST['parent']);
+            $this->saveMsg($_SESSION['name'], new DateTime(date('Y-m-d h:i:s', time())), $_POST['content'], $_POST['parent']);
         }
     }
 
     function saveMsg($n, $t, $c, $p = 0)
     {
+        global $entityManager;
         $c = nl2br($c);
-        $query = "INSERT INTO all_messages (name, time, content, parent) VALUES ('" . $n . "', '" . $t . "', '" . $c . "', '" . $p . "');";
-        // mysql_query($query);
-        mysqli_query($this->conn, $query);
+        $massege = new Message();
+        $massege->setName($n);
+        $massege->setTime($t);
+        $massege->setContent($c);
+        $massege->setParent($p);
+        $entityManager->persist($massege);
+        $entityManager->flush();
     }
 
     function loadMsg()
     {
-        $query = "SELECT * FROM all_messages WHERE parent = 0 ORDER BY sno DESC;";
-        $result = mysqli_query($this->conn, $query);
-        while ($row = mysqli_fetch_assoc($result)) {
-            $msg = new Message($row['name'], $row['time'], $row['content'], $row['sno']);
-            $msg->show();
-            $this->loadReply($row['sno']);
+        global $entityManager;
+        $query = $entityManager->createQuery('SELECT u FROM message u WHERE u.parent = 0 ORDER BY u.sno DESC');
+        $msgs = $query->getResult();
+        foreach ($msgs as $msg) {
+            echo "==============================================<br>";
+            echo "<table><tr><td>Name:</td><td>" . $msg->getName() . "</td></tr>";
+            echo "<tr><td>Time:</td><td>" . $msg->getTime() . "</td></tr>";
+            echo "<tr><td>Content:</td><td>" . $msg->getContent() . "</td></tr></table>";
+            echo "<form action='' method='POST' >";
+            echo "<textarea name='content' rows='2' cols='20' style='margin-left:10ex'></textarea>";
+            echo "<input type='text' name='parent' value='" . $msg->getSno() . "' style='display:none'>";
+            echo "<input type='submit' value='回覆'></form>";
+            $this->loadReply($msg->getSno());
         }
     }
 
     function loadReply($p)
     {
-        $query = "SELECT * FROM all_messages WHERE parent = $p ORDER BY sno DESC;";
-        $result = mysqli_query($this->conn, $query);
-        while ($row = mysqli_fetch_assoc($result)) {
-            $msg = new Message($row['name'], $row['time'], $row['content'], $row['sno']);
-            $msg->showReply();
+        global $entityManager;
+        $msgRepository = $entityManager->getRepository('Message');
+        $replies = $msgRepository->findBy(array('parent' => $p));
+        foreach ($replies as $reply) {
+            echo "<div style='margin-left:10ex'>---------------------------------------------------------<br>";
+            echo "<table><tr><td>Name:</td><td>" . $reply->getName() . "</td></tr>";
+            echo "<tr><td>Time:</td><td>" . $reply->getTime() . "</td></tr>";
+            echo "<tr><td>Content:</td><td>" . $reply->getContent() . "</td></tr></table>";
+            echo "</div>";
         }
     }
+
 }
