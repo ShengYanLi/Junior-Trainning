@@ -12,6 +12,9 @@ class MsgBoard
         $this->loadMsg();
     }
 
+    /**
+     * 接收用戶留言與回覆
+     */
     function receiveMsg()
     {
         if (count($_POST) != 0) {
@@ -19,6 +22,9 @@ class MsgBoard
         }
     }
 
+    /**
+     * 插入一筆新資料進留言table
+     */
     function saveMsg($n, $t, $c, $p = 0)
     {
         global $entityManager;
@@ -32,11 +38,14 @@ class MsgBoard
         $entityManager->flush();
     }
 
+    /**
+     * 載入所有頂層留言
+     */
     function loadMsg()
     {
         global $entityManager;
-        $query = $entityManager->createQuery('SELECT u FROM message u WHERE u.parent = 0 ORDER BY u.sno DESC');
-        $msgs = $query->getResult();
+        $msgRepository = $entityManager->getRepository('Message');
+        $msgs = $msgRepository->findBy(array('parent' => 0), array('sno' => 'DESC'));
         foreach ($msgs as $msg) {
             echo "==============================================<br>";
             echo "<table><tr><td>Name:</td><td>" . $msg->getName() . "</td></tr>";
@@ -50,6 +59,9 @@ class MsgBoard
         }
     }
 
+    /**
+     * 載入個別留言的回覆
+     */
     function loadReply($p)
     {
         global $entityManager;

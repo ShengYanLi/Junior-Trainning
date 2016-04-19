@@ -24,7 +24,7 @@ class Member
     protected $name;
 
     /**
-     * param string $id
+     * @param string $id
      */
     public function setId($id)
     {
@@ -32,7 +32,7 @@ class Member
     }
 
     /**
-     * return $this->id
+     * @return $this->id
      */
     public function getId()
     {
@@ -40,7 +40,7 @@ class Member
     }
 
     /**
-     * param string $password
+     * @param string $password
      */
     public function setPassword($password)
     {
@@ -48,7 +48,7 @@ class Member
     }
 
     /**
-     * return $this->password
+     * @return $this->password
      */
     public function getPassword()
     {
@@ -56,7 +56,7 @@ class Member
     }
 
     /**
-     * param string $name
+     * @param string $name
      */
     public function setName($name)
     {
@@ -64,7 +64,7 @@ class Member
     }
 
     /**
-     * return $this->name
+     * @return $this->name
      */
     public function getName()
     {

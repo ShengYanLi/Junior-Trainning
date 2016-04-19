@@ -35,7 +35,7 @@ class Message
     protected $content;
 
     /**
-     * return $this->sno
+     * @return $this->sno
      */
     public function getSno()
     {
@@ -43,7 +43,7 @@ class Message
     }
 
     /**
-     * param integer $parent
+     * @param integer $parent
      */
     public function setParent($parent)
     {
@@ -51,7 +51,7 @@ class Message
     }
 
     /**
-     * return $this->parent
+     * @return $this->parent
      */
     public function getParent()
     {
@@ -59,7 +59,7 @@ class Message
     }
 
     /**
-     * param string $name
+     * @param string $name
      */
     public function setName($name)
     {
@@ -67,7 +67,7 @@ class Message
     }
 
     /**
-     * return $this->name
+     * @return $this->name
      */
     public function getName()
     {
@@ -75,7 +75,7 @@ class Message
     }
 
     /**
-     * param datetime $time
+     * @param datetime $time
      */
     public function setTime($time)
     {
@@ -83,7 +83,7 @@ class Message
     }
 
     /**
-     * return $this->time
+     * @return $this->time
      */
     public function getTime()
     {
@@ -91,7 +91,7 @@ class Message
     }
 
     /**
-     * param text $content
+     * @param text $content
      */
     public function setContent($content)
     {
@@ -99,7 +99,7 @@ class Message
     }
 
     /**
-     * return $this->content
+     * @return $this->content
      */
     public function getContent()
     {

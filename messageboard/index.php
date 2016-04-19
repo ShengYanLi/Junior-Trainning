@@ -6,36 +6,15 @@ if (isset($_SESSION['id'])) {
 }
 
 include_once("database.php");
+include_once("formValidation.php");
 header("Content-Type:text/html; charset=utf-8");
 
-$idEpt = "";
-$pwEpt = "";
-$error = "";
-$success = "";
-
 if (count($_POST) != 0) {
-
-    $id = $_POST['id'];
-    $pw = $_POST['pw'];
-
-    if ($id == null) {
-        $idEpt = "未輸入帳號";
-    }
-    if ($pw == null) {
-        $pwEpt = "未輸入密碼";
-    }
-    if ($id && $pw) {
-
-        $member = $entityManager->getRepository('Member')->find($id);
-        if ($member == null || $member->getPassword() != $pw) {
-            $error = "帳號或密碼錯誤";
-        } else {
-            $_SESSION['id'] = $id;
-            $_SESSION['name'] = $member->getName();
-            $success = "登入成功！ 請稍等";
-            header("Refresh: 1; url='messageboard.php'");
-        }
-    }
+    $errorMsg = loginValidation($_POST['id'], $_POST['pw']);    
+    $idEpt = $errorMsg['idEpt'];
+    $pwEpt = $errorMsg['pwEpt'];
+    $error = $errorMsg['error'];
+    $success = $errorMsg['success'];
 }
 ?>
 <!DOCTYPE html>
