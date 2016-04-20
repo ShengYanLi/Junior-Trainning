@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION['id'])) {
+if (isset($_SESSION['account'])) {
     if ($_POST['logout'] == '登出') {
         session_unset();
         header("Content-Type:text/html; charset=utf-8");

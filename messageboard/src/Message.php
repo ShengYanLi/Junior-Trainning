@@ -1,8 +1,8 @@
 <?php
 
-// src/Message.php
 /**
- * @Entity @Table(name="message")
+ * @Entity
+ * @Table(name="message")
  * */
 class Message
 {
@@ -12,17 +12,19 @@ class Message
      * @Column(type="integer")
      * @GeneratedValue
      */
-    protected $sno;
+    protected $id;
 
     /**
      * @Column(type="integer")
      */
-    protected $parent;
+    protected $parentId;
 
     /**
-     * @Column(type="string")
+     * @var Member|null the member this message belongs (if any)
+     * @ManyToOne(targetEntity="Member", inversedBy="messages")
+     * @JoinColumn(name="member_id", referencedColumnName="id")
      */
-    protected $name;
+    protected $member;
 
     /**
      * @Column(type="datetime")
@@ -35,55 +37,79 @@ class Message
     protected $content;
 
     /**
-     * @return $this->sno
-     */
-    public function getSno()
-    {
-        return $this->sno;
-    }
-
-    /**
-     * @param integer $parent
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-    }
-
-    /**
-     * @return $this->parent
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return $this->name
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
+     * @param integer $parentId
      * @param datetime $time
+     * @param text $content
+     */
+    public function __construct($parentId, $time, $content)
+    {
+        $this->setParentId($parentId);
+        $this->setTime($time);
+        $this->setContent($content);
+    }
+
+    /**
+     * 取得留言編號
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * 設定此留言的上層留言編號
+     * @param integer $parentId
+     * @return Message
+     */
+    public function setParentId($parentId)
+    {
+        $this->parentId = $parentId;
+        return $this;
+    }
+
+    /**
+     * 取得此留言的上層留言編號
+     * @return integer
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * 設定留言的會員
+     * @param Member $member
+     * @return Message
+     */
+    public function setMember($member)
+    {
+        $this->member = $member;
+    }
+
+    /**
+     * 取得留言的會員
+     * @return Member
+     */
+    public function getMember()
+    {
+        return $this->member;
+    }
+
+    /**
+     * 設定留言時間
+     * @param datetime $time
+     * @return Message
      */
     public function setTime($time)
     {
         $this->time = $time;
+        return $this;
     }
 
     /**
-     * @return $this->time
+     * 取得留言時間
+     * @return DateTime
      */
     public function getTime()
     {
@@ -91,15 +117,19 @@ class Message
     }
 
     /**
+     * 設定留言內容
      * @param text $content
+     * @return Message
      */
     public function setContent($content)
     {
         $this->content = $content;
+        return $this;
     }
 
     /**
-     * @return $this->content
+     * 取得留言內容
+     * @return string
      */
     public function getContent()
     {

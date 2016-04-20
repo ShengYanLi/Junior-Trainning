@@ -1,17 +1,26 @@
 <?php
 
-// src/Member.php
+use Doctrine\Common\Collections\Collection,
+    Doctrine\Common\Collections\ArrayCollection;
+
 /**
- * @Entity @Table(name="member")
+ * @Entity
+ * @Table(name="member")
  * */
 class Member
 {
 
     /**
      * @Id
-     * @Column(type="string")
+     * @Column(type="integer")
+     * @GeneratedValue
      */
     protected $id;
+
+    /**
+     * @Column(type="string", unique=TRUE)
+     */
+    protected $account;
 
     /**
      * @Column(type="string")
@@ -24,15 +33,27 @@ class Member
     protected $name;
 
     /**
-     * @param string $id
+     * @var Collection
+     * @OneToMany(targetEntity="Message", mappedBy="member")
      */
-    public function setId($id)
+    protected $messages;
+
+    /**
+     * @param string $account
+     * @param string $password
+     * @param string $name
+     */
+    public function __construct($account, $password, $name)
     {
-        $this->id = $id;
+        $this->messages = new ArrayCollection();
+        $this->setAccount($account);
+        $this->setPassword($password);
+        $this->setName($name);
     }
 
     /**
-     * @return $this->id
+     * 取得會員編號
+     * @return integer
      */
     public function getId()
     {
@@ -40,15 +61,39 @@ class Member
     }
 
     /**
+     * 設定會員帳號
+     * @param string $account
+     * @return Member
+     */
+    public function setAccount($account)
+    {
+        $this->account = $account;
+        return $this;
+    }
+
+    /**
+     * 取得會員帳號
+     * @return string
+     */
+    public function getAccount()
+    {
+        return $this->account;
+    }
+
+    /**
+     * 設定會員密碼
      * @param string $password
+     * @return Member
      */
     public function setPassword($password)
     {
         $this->password = $password;
+        return $this;
     }
 
     /**
-     * @return $this->password
+     * 取得會員密碼
+     * @return string
      */
     public function getPassword()
     {
@@ -56,19 +101,32 @@ class Member
     }
 
     /**
+     * 設定會員名稱
      * @param string $name
+     * @return Member
      */
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
-     * @return $this->name
+     * 取得會員名稱
+     * @return string
      */
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * 取得此會員留言集合
+     * @return Collection
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 
 }
