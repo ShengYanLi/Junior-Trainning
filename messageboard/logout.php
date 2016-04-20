@@ -6,9 +6,7 @@ if (isset($_SESSION['account'])) {
         header("Content-Type:text/html; charset=utf-8");
         echo '登出中......';
         header("Refresh: 1; url='index.php'");
-    } else {
-        header("Location: messageboard.php");
     }
-} else {
-    header("Location: index.php");
+    header("Location: messageboard.php");
 }
+header("Location: index.php");

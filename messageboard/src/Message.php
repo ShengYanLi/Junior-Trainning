@@ -37,9 +37,9 @@ class Message
     protected $content;
 
     /**
-     * @param integer $parentId
-     * @param datetime $time
-     * @param text $content
+     * @param integer $parentId 上層留言編號
+     * @param datetime $time 留言時間
+     * @param text $content 留言內容
      */
     public function __construct($parentId, $time, $content)
     {
@@ -59,7 +59,7 @@ class Message
 
     /**
      * 設定此留言的上層留言編號
-     * @param integer $parentId
+     * @param integer $parentId 上層留言編號
      * @return Message
      */
     public function setParentId($parentId)
@@ -79,7 +79,7 @@ class Message
 
     /**
      * 設定留言的會員
-     * @param Member $member
+     * @param Member $member 留言者
      * @return Message
      */
     public function setMember($member)
@@ -98,7 +98,7 @@ class Message
 
     /**
      * 設定留言時間
-     * @param datetime $time
+     * @param datetime $time 留言時間
      * @return Message
      */
     public function setTime($time)
@@ -118,7 +118,7 @@ class Message
 
     /**
      * 設定留言內容
-     * @param text $content
+     * @param text $content 留言內容
      * @return Message
      */
     public function setContent($content)

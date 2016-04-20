@@ -10,9 +10,9 @@ include_once("formValidation.php");
 header("Content-Type:text/html; charset=utf-8");
 
 if (count($_POST) != 0) {
-    $errorMsg = loginValidation($_POST['account'], $_POST['pw']);    
+    $errorMsg = loginValidation($_POST['account'], $_POST['password']);    
     $accountEpt = $errorMsg['accountEpt'];
-    $pwEpt = $errorMsg['pwEpt'];
+    $passwordEpt = $errorMsg['passwordEpt'];
     $error = $errorMsg['error'];
     $success = $errorMsg['success'];
 }
@@ -34,8 +34,8 @@ if (count($_POST) != 0) {
                 </tr>
                 <tr>
                     <td>密碼:</td>
-                    <td><input type='password' name='pw' ></td>
-                    <td><b><?php echo $pwEpt; ?></b></td>
+                    <td><input type='password' name='password' ></td>
+                    <td><b><?php echo $passwordEpt; ?></b></td>
                 </tr>
                 <tr>
                     <td><input type='submit' value="登入"></td>

@@ -18,24 +18,24 @@ class MsgBoard
     function receiveMsg()
     {
         if (count($_POST) != 0) {
-            $this->saveMsg($_SESSION['id'], new DateTime(date('Y-m-d h:i:s', time())), $_POST['content'], $_POST['parentId']);
+            $this->saveMsg($_SESSION['id'], $_POST['parentId'], new DateTime(date('Y-m-d h:i:s', time())), $_POST['content']);
         }
     }
 
     /**
      * 插入一筆新資料進留言table
-     * @param integer $m 留言者編號
-     * @param DateTime $t 
-     * @param string $c 留言內容
-     * @param integer $p 其上層留言編號，預設值0表示頂層留言
+     * @param integer $memberId 留言者編號
+     * @param integer $parentId 其上層留言編號，預設值0表示頂層留言
+     * @param DateTime $time 留言時間
+     * @param string $content 留言內容
      */
-    function saveMsg($i, $t, $c, $p = 0)
+    function saveMsg($memberId, $parentId = 0, $time, $content)
     {
         global $entityManager;
 
-        $c = nl2br($c);
-        $member = $entityManager->getRepository('Member')->find($i);
-        $massege = new Message($p, $t, $c);
+        $content = nl2br($content);
+        $member = $entityManager->getRepository('Member')->find($memberId);
+        $massege = new Message($parentId, $time, $content);
         $member->getMessages()->add($massege);
         $massege->setMember($member); //
         $entityManager->persist($massege);
@@ -65,13 +65,13 @@ class MsgBoard
 
     /**
      * 載入個別留言的回覆
-     * @param integer $p 回覆的上層留言編號
+     * @param integer $parentId 回覆的上層留言編號
      */
-    function loadReply($p)
+    function loadReply($parentId)
     {
         global $entityManager;
         $msgRepository = $entityManager->getRepository('Message');
-        $replies = $msgRepository->findBy(array('parentId' => $p));
+        $replies = $msgRepository->findBy(array('parentId' => $parentId));
         foreach ($replies as $reply) {
             echo "<div style='margin-left:10ex'>---------------------------------------------------------<br>";
             echo "<table><tr><td>Name:</td><td>" . $reply->getMember()->getName() . "</td></tr>";

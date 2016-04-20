@@ -11,7 +11,7 @@ header("Content-Type:text/html; charset=utf-8");
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>MessageBoard</title>
+        <title>留言板</title>
     </head>
     <body>
         <form action="logout.php" method='POST'>
@@ -26,7 +26,7 @@ header("Content-Type:text/html; charset=utf-8");
         </form>
         <?php
         include_once('MsgBoard.php');
-        $mb = new MsgBoard();
+        $msgBoard = new MsgBoard();
         ?>
     </body>
 </html>

@@ -39,9 +39,9 @@ class Member
     protected $messages;
 
     /**
-     * @param string $account
-     * @param string $password
-     * @param string $name
+     * @param string $account 帳號
+     * @param string $password 密碼
+     * @param string $name 名稱
      */
     public function __construct($account, $password, $name)
     {
@@ -62,7 +62,7 @@ class Member
 
     /**
      * 設定會員帳號
-     * @param string $account
+     * @param string $account 帳號
      * @return Member
      */
     public function setAccount($account)
@@ -82,7 +82,7 @@ class Member
 
     /**
      * 設定會員密碼
-     * @param string $password
+     * @param string $password 密碼
      * @return Member
      */
     public function setPassword($password)
@@ -102,7 +102,7 @@ class Member
 
     /**
      * 設定會員名稱
-     * @param string $name
+     * @param string $name 名稱
      * @return Member
      */
     public function setName($name)

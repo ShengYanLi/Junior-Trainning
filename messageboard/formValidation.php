@@ -2,27 +2,26 @@
 
 /**
  * 登入驗證，設定SESSION並跳轉頁面，不合則返回錯誤訊息
- * @global object $entityManager
- * @param string $account
- * @param string $pw
+ * @param string $account 帳號
+ * @param string $password 密碼
  * @return array
  */
-function loginValidation($account, $pw)
+function loginValidation($account, $password)
 {
     global $entityManager;
 
     if ($account == null) {
         return $errorMsg = array("accountEpt" => "未輸入帳號");
     }
-    if ($pw == null) {
-        return $errorMsg = array("pwEpt" => "未輸入密碼");
+    if ($password == null) {
+        return $errorMsg = array("passwordEpt" => "未輸入密碼");
     }
 
     $member = $entityManager->getRepository('Member')->findOneBy(array('account' => $account));
     if ($member == null) {
         return $errorMsg = array("error" => "無此帳號");
     }
-    if ($member->getPassword() != $pw) {
+    if ($member->getPassword() != $password) {
         return $errorMsg = array("error" => "密碼錯誤");
     }
 
@@ -34,14 +33,13 @@ function loginValidation($account, $pw)
 
 /**
  * 註冊驗證，返回成功或失敗訊息
- * @global object $entityManager
- * @param string $account
- * @param string $pw
- * @param string $pw2
- * @param string $name
+ * @param string $account 帳號
+ * @param string $password 密碼
+ * @param string $password2 重覆輸入密碼
+ * @param string $name 名稱
  * @return array
  */
-function registerValidation($account, $pw, $pw2, $name)
+function registerValidation($account, $password, $password2, $name)
 {
     global $entityManager;
 
@@ -49,11 +47,11 @@ function registerValidation($account, $pw, $pw2, $name)
         $accountEpt = "未輸入帳號";
         return $errorMsg = array("accountEpt" => "未輸入帳號");
     }
-    if ($pw == null) {
-        $pwEpt = "未輸入密碼";
-        return $errorMsg = array("pwEpt" => "未輸入密碼");
+    if ($password == null) {
+        $passwordEpt = "未輸入密碼";
+        return $errorMsg = array("passwordEpt" => "未輸入密碼");
     }
-    if (strcmp($pw2, $pw) != 0) {
+    if (strcmp($password2, $password) != 0) {
         $notEqu = "輸入兩次密碼不相同";
         return $errorMsg = array("notEqu" => "輸入兩次密碼不相同");
     }
@@ -62,7 +60,7 @@ function registerValidation($account, $pw, $pw2, $name)
         return $errorMsg = array("nameEpt" => "未輸入暱稱");
     }
 
-    $member = new Member($account, $pw, $name);
+    $member = new Member($account, $password, $name);
     $entityManager->persist($member);
     $entityManager->flush();
 
